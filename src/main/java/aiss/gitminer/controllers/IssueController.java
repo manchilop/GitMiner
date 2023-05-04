@@ -2,6 +2,8 @@ package aiss.gitminer.controllers;
 
 import aiss.gitminer.model.Issue;
 import aiss.gitminer.repository.IssueRepository;
+import aiss.gitminer.exception.ResourceNotFoundException;
+import aiss.gitminer.repository.ProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -9,10 +11,12 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/issues")
+@RequestMapping("/gitminer/issues")
 public class IssueController {
     @Autowired
     IssueRepository issueRepository;
+    @Autowired
+    ProjectRepository projectRepository;
 
     @GetMapping
     public List<Issue> findAll(@RequestParam(required = false) String state) {
@@ -25,10 +29,12 @@ public class IssueController {
 
     // GET http://localhost:8080/api/issues/{id}
     @GetMapping("/{id}")
-    public Issue findById(@PathVariable long id) {
+    public Issue findById(@PathVariable long id) throws ResourceNotFoundException {
         Optional<Issue> issue = issueRepository.findById(id);
+        if (!issue.isPresent()) {
+            throw new ResourceNotFoundException("Issue not found with id " + id);
+        }
 
         return issue.get();
     }
-
 }
