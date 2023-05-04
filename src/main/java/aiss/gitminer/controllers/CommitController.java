@@ -20,10 +20,9 @@ public class CommitController {
     ProjectRepository projectRepository;
 
     // GET http://localhost:8080/api/project/{ProjectId}/commits
-    @GetMapping("/project/{ProjectId}/commits")
-    public List<Commit> findAll(@PathVariable(value="ProjectId") Long id){
-        Optional<Project> projectData = projectRepository.findById(id);
-        return projectData.get().getCommits();
+    @GetMapping
+    public List<Commit> findAll() Long id){
+        return commitRepository.findAll();
     }
 
     // GET http://localhost:8080/api/commits/{id}
