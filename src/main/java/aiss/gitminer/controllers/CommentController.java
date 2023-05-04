@@ -23,7 +23,7 @@ public class CommentController {
     }
 
     @GetMapping("/{id}")
-    public Comment findOne(@PathVariable Long id) throws ResourceNotFoundException {
+    public Comment findOne(@PathVariable String id) throws ResourceNotFoundException {
         Optional<Comment> comment = commentRepository.findById(id);
         if (!comment.isPresent()) {
             throw new ResourceNotFoundException("Comment not found with id " + id);

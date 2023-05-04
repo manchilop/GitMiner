@@ -26,7 +26,7 @@ ProjectController {
 
     // GET http://localhost:8080/gitminer/projects/{id}
     @GetMapping("/{id}")
-    public Project findOne(@PathVariable Long id) throws ResourceNotFoundException{
+    public Project findOne(@PathVariable String id) throws ResourceNotFoundException{
         Optional<Project> project = projectRepository.findById(id);
         if (!project.isPresent()) {
             throw new ResourceNotFoundException("Project not found with id " + id);
@@ -45,7 +45,7 @@ ProjectController {
     // PUT http://localhost:8080/gitminer/projects/{id}
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void updateProject(@RequestBody @Valid Project updatedProject, @PathVariable Long id){
+    public void updateProject(@RequestBody @Valid Project updatedProject, @PathVariable String id){
         Optional<Project> projectData = projectRepository.findById(id);
         Project _project = projectData.get();
         _project.setName(updatedProject.getName());
@@ -56,7 +56,7 @@ ProjectController {
     // DELETE http://localhost:8080/gitminer/projects/{id}
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteproject(@PathVariable Long id){
+    public void deleteproject(@PathVariable String id){
        if(projectRepository.existsById(id)){
            projectRepository.deleteById(id);
        }

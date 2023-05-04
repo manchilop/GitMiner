@@ -4,7 +4,6 @@ import aiss.gitminer.model.Comment;
 import aiss.gitminer.model.Issue;
 import aiss.gitminer.repository.IssueRepository;
 import aiss.gitminer.exception.ResourceNotFoundException;
-import aiss.gitminer.repository.ProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,13 +15,13 @@ import java.util.Optional;
 public class IssueController {
     @Autowired
     IssueRepository issueRepository;
-    @Autowired
-    ProjectRepository projectRepository;
 
     @GetMapping
-    public List<Issue> findAll(@RequestParam(required = false) String state) {
+    public List<Issue> findAll(@RequestParam(required = false) String state, @RequestParam(required = false) String authorId) {
         if (state != null) {
             return issueRepository.findByState(state);
+        } else if (authorId != null) {
+            return issueRepository.findByAuthorId(authorId);
         } else {
             return issueRepository.findAll();
         }
@@ -30,7 +29,7 @@ public class IssueController {
 
     // GET http://localhost:8080/gitminer/issues/{id}
     @GetMapping("/{id}")
-    public Issue findById(@PathVariable long id) throws ResourceNotFoundException {
+    public Issue findById(@PathVariable String id) throws ResourceNotFoundException {
         Optional<Issue> issue = issueRepository.findById(id);
         if (!issue.isPresent()) {
             throw new ResourceNotFoundException("Issue not found with id " + id);
@@ -41,7 +40,7 @@ public class IssueController {
 
     // GET http://localhost:8080/gitminer/issues/{id}/comments
     @GetMapping("/{id}/comments")
-    public List<Comment> findCommentsByIssueId(@PathVariable long id) throws ResourceNotFoundException {
+    public List<Comment> findCommentsByIssueId(@PathVariable String id) throws ResourceNotFoundException {
         Optional<Issue> issue = issueRepository.findById(id);
         if (!issue.isPresent()) {
             throw new ResourceNotFoundException("Issue not found with id " + id);
