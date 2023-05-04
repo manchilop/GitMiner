@@ -13,7 +13,7 @@ import java.util.Optional;
 
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/gitminer/commits")
 public class CommitController {
     @Autowired
     CommitRepository commitRepository;

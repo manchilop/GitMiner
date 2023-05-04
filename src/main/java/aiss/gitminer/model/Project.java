@@ -46,6 +46,14 @@ public class Project {
         this.issues = new ArrayList<>();
     }
 
+    public Project(Project projectToCopy) {
+        this.id = projectToCopy.getId();
+        this.name = projectToCopy.getName();
+        this.webUrl = projectToCopy.getWebUrl();
+        this.commits = projectToCopy.getCommits();
+        this.issues = projectToCopy.getIssues();
+    }
+
     public String getId() {
         return id;
     }

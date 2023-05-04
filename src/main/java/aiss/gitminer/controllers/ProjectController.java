@@ -1,5 +1,6 @@
 package aiss.gitminer.controllers;
 
+import aiss.gitminer.exception.ResourceNotFoundException;
 import aiss.gitminer.model.Project;
 import aiss.gitminer.repository.ProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,34 +12,37 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/project")
+@RequestMapping("/gitminer/projects")
 public class
 ProjectController {
     @Autowired
     ProjectRepository projectRepository;
 
-    // GET http://localhost:8080/api/project/all
-    @GetMapping("/all")
+    // GET http://localhost:8080/gitminer/projects
+    @GetMapping
     public List<Project> findAll() {
         return projectRepository.findAll();
     }
 
-    // GET http://localhost:8080/api/project/{id}
+    // GET http://localhost:8080/gitminer/projects/{id}
     @GetMapping("/{id}")
-    public Project findOne(@PathVariable Long id){
+    public Project findOne(@PathVariable Long id) throws ResourceNotFoundException{
         Optional<Project> project = projectRepository.findById(id);
+        if (!project.isPresent()) {
+            throw new ResourceNotFoundException("Project not found with id " + id);
+        }
         return project.get();
     }
 
-    // POST http://localhost:8080/api/project
+    // POST http://localhost:8080/gitminer/projects
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Project createProject(@RequestBody @Valid Project project){
-        Project _project = projectRepository.save(new Project(project.getName(),project.getWebUrl()));
+        Project _project = projectRepository.save(new Project(project));
         return _project;
     }
 
-    // PUT http://localhost:8080/api/project/{id}
+    // PUT http://localhost:8080/gitminer/projects/{id}
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void updateProject(@RequestBody @Valid Project updatedProject, @PathVariable Long id){
@@ -49,7 +53,7 @@ ProjectController {
         projectRepository.save(_project);
     }
 
-    // DELETE http://localhost:8080/api/project/{id}
+    // DELETE http://localhost:8080/gitminer/projects/{id}
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteproject(@PathVariable Long id){
