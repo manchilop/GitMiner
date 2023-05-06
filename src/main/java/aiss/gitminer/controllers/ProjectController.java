@@ -35,7 +35,7 @@ ProjectController {
     }
 
     // POST http://localhost:8080/gitminer/projects
-    @PostMapping
+    @PostMapping("/{id}")
     @ResponseStatus(HttpStatus.CREATED)
     public Project createProject(@RequestBody @Valid Project project){
         Project _project = projectRepository.save(new Project(project));

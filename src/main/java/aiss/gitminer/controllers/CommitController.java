@@ -2,7 +2,6 @@ package aiss.gitminer.controllers;
 
 import aiss.gitminer.exception.ResourceNotFoundException;
 import aiss.gitminer.model.Commit;
-import aiss.gitminer.model.Project;
 import aiss.gitminer.repository.CommitRepository;
 import aiss.gitminer.repository.ProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
