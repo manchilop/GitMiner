@@ -29,7 +29,7 @@ ProjectController {
     @Operation(
             summary = "Retrieve a list of projects",
             description = "Get a list of Project objects with all the projects stored",
-            tags = { "projects", "get" }
+            tags = { "Project", "get" }
     )
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Successfully retrieved the list of projects",
@@ -45,7 +45,7 @@ ProjectController {
     @Operation(
             summary = "Retrieve a project by Id",
             description = "Get a Project object provided its ID",
-            tags = { "projects", "get" }
+            tags = { "Project", "get" }
     )
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Successfully retrieved requested project",
@@ -54,7 +54,7 @@ ProjectController {
                     content = {@Content(schema = @Schema())})
     })
     @GetMapping("/{id}")
-    public Project findOne(@Parameter(description = "id of the project to be searched") @PathVariable String id) throws ResourceNotFoundException{
+    public Project findOne(@Parameter(description = "Id of the project to be searched") @PathVariable String id) throws ResourceNotFoundException{
         Optional<Project> project = projectRepository.findById(id);
         if (!project.isPresent()) {
             throw new ResourceNotFoundException("Project not found with id " + id);
@@ -66,7 +66,7 @@ ProjectController {
     @Operation(
             summary = "Insert a project",
             description = "Add a new project whose data is passed in the body of the request in JSON format",
-            tags = { "projects", "post" }
+            tags = { "Project", "post" }
     )
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "Successfully created",
@@ -85,7 +85,7 @@ ProjectController {
     @Operation(
             summary = "Update a project",
             description = "Update a Project object by specifying its id and passing data  in the body of the request in JSON format",
-            tags = { "projects", "put" }
+            tags = { "Project", "put" }
     )
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "Successfully updated",
@@ -109,7 +109,7 @@ ProjectController {
     @Operation(
             summary = "Delete a project",
             description = "Delete a Project object by specifying its id",
-            tags = { "projects", "delete" }
+            tags = { "Project", "delete" }
     )
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "Successfully deleted",
