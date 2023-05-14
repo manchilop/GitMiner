@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -67,5 +68,29 @@ public class CommitController {
             throw new ResourceNotFoundException("Commit not found with id " + id);
         }
         return commit.get();
+    }
+
+    // DELETE http://localhost:8080/gitminer/commits/{id}
+    @Operation(
+            summary = "Delete a commit",
+            description = "Delete a Commit object by specifying its id",
+            tags = { "Commit", "delete" }
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "Successfully deleted",
+                    content = { @Content(schema = @Schema()) }),
+            @ApiResponse(responseCode = "400", description = "Incorrectly formed request",
+                    content = { @Content(schema = @Schema()) }),
+            @ApiResponse(responseCode = "404", description = "Commit to delete not found",
+                    content = { @Content(schema = @Schema()) })
+    })
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@Parameter(description = "id of the commit to be deleted") @PathVariable String id) throws ResourceNotFoundException{
+        if(commitRepository.existsById(id)){
+            commitRepository.deleteById(id);
+        }else {
+            throw new ResourceNotFoundException("Commit not found with id " + id);
+        }
     }
 }

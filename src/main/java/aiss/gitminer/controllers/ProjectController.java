@@ -81,30 +81,6 @@ ProjectController {
         return _project;
     }
 
-    // PUT http://localhost:8080/gitminer/projects/{id}
-    @Operation(
-            summary = "Update a project",
-            description = "Update a Project object by specifying its id and passing data  in the body of the request in JSON format",
-            tags = { "Project", "put" }
-    )
-    @ApiResponses({
-            @ApiResponse(responseCode = "204", description = "Successfully updated",
-                    content = { @Content(schema = @Schema()) }),
-            @ApiResponse(responseCode = "400", description = "Incorrectly formed request",
-                    content = { @Content(schema = @Schema()) }),
-            @ApiResponse(responseCode = "404", description = "Project to update not found",
-                    content = { @Content(schema = @Schema()) })
-    })
-    @PutMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void update(@RequestBody @Valid Project updatedProject, @Parameter(description = "id of the project to be updated") @PathVariable String id){
-        Optional<Project> projectData = projectRepository.findById(id);
-        Project _project = projectData.get();
-        _project.setName(updatedProject.getName());
-        _project.setWebUrl(updatedProject.getWebUrl());
-        projectRepository.save(_project);
-    }
-
     // DELETE http://localhost:8080/gitminer/projects/{id}
     @Operation(
             summary = "Delete a project",
@@ -121,9 +97,11 @@ ProjectController {
     })
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@Parameter(description = "id of the project to be deleted") @PathVariable String id){
+    public void delete(@Parameter(description = "id of the project to be deleted") @PathVariable String id) throws ResourceNotFoundException{
        if(projectRepository.existsById(id)){
            projectRepository.deleteById(id);
+       }else {
+           throw new ResourceNotFoundException("Issue not found with id " + id);
        }
     }
 }
